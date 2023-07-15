@@ -97,6 +97,7 @@ const BooksControlBar = () => {
             </Menu.Item>
             <Menu.Item
               icon={<IconLayoutList size={14} />}
+              disabled
               // onClick={() => setLibraryView(LibraryView.List)}
               // rightSection={libraryView === LibraryView.List ? <IconCheck size={14} /> : ''}
             >

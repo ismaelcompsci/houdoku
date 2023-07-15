@@ -22,7 +22,16 @@ import {
   IconSpacingVertical,
   IconX,
 } from '@tabler/icons';
-import { Box, Button, Center, Group, MantineTheme, Menu, ScrollArea } from '@mantine/core';
+import {
+  Box,
+  Button,
+  Center,
+  Group,
+  MantineTheme,
+  MediaQuery,
+  Menu,
+  ScrollArea,
+} from '@mantine/core';
 import styles from './ReaderHeader.css';
 import { ReadingDirection, PageStyle, OffsetPages } from '../../models/types';
 import {
@@ -329,53 +338,59 @@ const ReaderHeader: React.FC<Props> = (props: Props) => {
             />
           </Group>
 
-          <Button
-            compact
-            styles={buttonStyles}
-            radius={0}
-            leftIcon={ICONS_PAGE_STYLE[pageStyle]}
-            onClick={() => setPageStyle(nextPageStyle(pageStyle))}
-          >
-            {TEXT_PAGE_STYLE[pageStyle]}
-          </Button>
-
-          {pageStyle === PageStyle.Double ? (
+          <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
             <Button
               compact
               styles={buttonStyles}
               radius={0}
-              leftIcon={ICONS_OFFSET_PAGES[offsetPages]}
-              onClick={() => setOffsetPages(nextOffsetPages(offsetPages))}
+              leftIcon={ICONS_PAGE_STYLE[pageStyle]}
+              onClick={() => setPageStyle(nextPageStyle(pageStyle))}
             >
-              {TEXT_OFFSET_PAGES[offsetPages]}
+              {TEXT_PAGE_STYLE[pageStyle]}
             </Button>
+          </MediaQuery>
+
+          {pageStyle === PageStyle.Double ? (
+            <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
+              <Button
+                compact
+                styles={buttonStyles}
+                radius={0}
+                leftIcon={ICONS_OFFSET_PAGES[offsetPages]}
+                onClick={() => setOffsetPages(nextOffsetPages(offsetPages))}
+              >
+                {TEXT_OFFSET_PAGES[offsetPages]}
+              </Button>
+            </MediaQuery>
           ) : (
             ''
           )}
-
-          {renderFitButton()}
-
-          <Button
-            compact
-            styles={buttonStyles}
-            radius={0}
-            leftIcon={fitStretch ? <IconCheck size={14} /> : <IconX size={14} />}
-            disabled={!(fitContainToHeight || fitContainToWidth)}
-            onClick={() => setFitStretch(!fitStretch)}
-          >
-            Stretch to Fill
-          </Button>
-
-          <Button
-            compact
-            styles={buttonStyles}
-            radius={0}
-            leftIcon={ICONS_READING_DIRECTION[readingDirection]}
-            onClick={() => setReadingDirection(nextReadingDirection(readingDirection))}
-          >
-            {TEXT_READING_DIRECTION[readingDirection]}
-          </Button>
-
+          <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
+            {renderFitButton()}
+          </MediaQuery>
+          <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
+            <Button
+              compact
+              styles={buttonStyles}
+              radius={0}
+              leftIcon={fitStretch ? <IconCheck size={14} /> : <IconX size={14} />}
+              disabled={!(fitContainToHeight || fitContainToWidth)}
+              onClick={() => setFitStretch(!fitStretch)}
+            >
+              Stretch to Fill
+            </Button>
+          </MediaQuery>
+          <MediaQuery smallerThan="xs" styles={{ display: 'none' }}>
+            <Button
+              compact
+              styles={buttonStyles}
+              radius={0}
+              leftIcon={ICONS_READING_DIRECTION[readingDirection]}
+              onClick={() => setReadingDirection(nextReadingDirection(readingDirection))}
+            >
+              {TEXT_READING_DIRECTION[readingDirection]}
+            </Button>
+          </MediaQuery>
           <Button
             compact
             styles={buttonStyles}
