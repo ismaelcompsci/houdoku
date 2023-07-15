@@ -3,7 +3,7 @@ import fs from 'fs';
 import rimraf from 'rimraf';
 import { ipcRenderer } from 'electron';
 import log from 'electron-log';
-import { Chapter, Series } from 'houdoku-extension-lib';
+import { Book, Chapter, Series } from 'houdoku-extension-lib';
 import ipcChannels from '../constants/ipcChannels.json';
 
 /**
@@ -189,21 +189,45 @@ export async function deleteDownloadedChapter(
  * used to ensure that a thumbnail does not exist.
  * @param series the series to delete the thumbnail for
  */
-export async function deleteThumbnail(series: Series) {
+export async function deleteThumbnail(series?: Series, thumbnailPath?: string) {
   const thumbnailsDir = await ipcRenderer.invoke(ipcChannels.GET_PATH.THUMBNAILS_DIR);
   if (!fs.existsSync(thumbnailsDir)) return;
 
-  const files = fs.readdirSync(thumbnailsDir);
-  // eslint-disable-next-line no-restricted-syntax
-  for (const file of files) {
-    if (file.startsWith(`${series.id}.`)) {
-      const curPath = path.join(thumbnailsDir, file);
-      log.debug(`Deleting thumbnail at ${curPath}`);
-      fs.unlink(curPath, (err) => {
-        if (err) {
-          log.error(err);
-        }
-      });
+  if (series) {
+    const files = fs.readdirSync(thumbnailsDir);
+    // eslint-disable-next-line no-restricted-syntax
+    for (const file of files) {
+      if (file.startsWith(`${series.id}.`)) {
+        const curPath = path.join(thumbnailsDir, file);
+        log.debug(`Deleting thumbnail at ${curPath}`);
+        fs.unlink(curPath, (err) => {
+          if (err) {
+            log.error(err);
+          }
+        });
+      }
     }
   }
+  if (thumbnailPath) {
+    fs.unlink(thumbnailPath, (err) => {
+      if (err) {
+        log.error(err);
+      }
+    });
+  }
+}
+
+/**
+ * Delete a book and book cover from the filesystem.
+ * This does not necessarily require the thumbnail to exist; therefore this function can be simply
+ * used to ensure that a  book and book cover does not exist.
+ * @param book the book to delete
+ */
+export async function deleteBook(book: Book) {
+  fs.rm(book.path, () => {
+    log.info(`Deleted file at: ${book.path}`);
+  });
+  fs.rm(book.coverPath, () => {
+    log.info(`Deleted file at: ${book.coverPath}`);
+  });
 }

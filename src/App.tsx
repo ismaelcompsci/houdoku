@@ -3,7 +3,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import log from 'electron-log';
 import { ipcRenderer } from 'electron';
 import { ExtensionMetadata } from 'houdoku-extension-lib';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   Box,
   Button,
@@ -33,7 +33,7 @@ import storeKeys from './constants/storeKeys.json';
 import { TrackerMetadata } from './models/types';
 import { migrateSeriesTags } from './features/library/utils';
 import AppLoading from './components/general/AppLoading';
-import { categoryListState, seriesListState } from './state/libraryStates';
+import { bookListState, categoryListState, seriesListState } from './state/libraryStates';
 import { downloaderClient } from './services/downloader';
 import {
   currentTaskState,
@@ -44,6 +44,7 @@ import {
 import { autoCheckForExtensionUpdatesState, autoCheckForUpdatesState } from './state/settingStates';
 import { ErrorBoundary } from './components/general/ErrorBoundary';
 import library from './services/library';
+import BookReaderPage from './components/books/bookreader/BookReaderPage';
 
 const loadStoredExtensionSettings = () => {
   log.info('Loading stored extension settings...');
@@ -164,6 +165,7 @@ ipcRenderer.on(ipcChannels.APP.SHOW_RESTART_UPDATE_DIALOG, () => {
 export default function App() {
   const [loading, setLoading] = useState(true);
   const setSeriesList = useSetRecoilState(seriesListState);
+  const setBookList = useSetRecoilState(bookListState);
   const setCategoryList = useSetRecoilState(categoryListState);
   const setRunning = useSetRecoilState(runningState);
   const setQueue = useSetRecoilState(queueState);
@@ -251,6 +253,7 @@ export default function App() {
       }
 
       setSeriesList(library.fetchSeriesList());
+      setBookList(library.fetchBookList());
       setCategoryList(library.fetchCategoryList());
       setLoading(false);
     }
@@ -272,6 +275,7 @@ export default function App() {
                       path={`${routes.READER}/:series_id/:chapter_id`}
                       element={<ReaderPage />}
                     />
+                    <Route path={`${routes.BOOKREADER}/:book_id`} element={<BookReaderPage />} />
                     <Route path="*" element={<DashboardPage />} />
                   </Routes>
                 </Router>

@@ -1,0 +1,31 @@
+.root::-webkit-scrollbar-track {
+    margin-top: calc(var(--reader-header-height) + var(--titlebar-height));
+  }
+  
+  .root {
+    --reader-header-height: 30px;
+    margin-top: 0 !important;
+  }
+  
+  .content {
+    margin-top: var(--titlebar-height);
+    outline: none;
+  }
+
+  .reader {
+    height: calc(100vh - 30px - 24px);
+  }
+  
+  .headerless {
+    --reader-header-height: 0px;
+  }
+  
+  .finalChapterContainer {
+    height: calc(100vh - var(--reader-header-height) - var(--titlebar-height));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    font-size: 1.2rem;
+    user-select: none;
+  }

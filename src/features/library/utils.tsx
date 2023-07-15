@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { ipcRenderer } from 'electron';
 import log from 'electron-log';
-import { Chapter, LanguageKey, Series } from 'houdoku-extension-lib';
+import { Book, Chapter, LanguageKey, Series } from 'houdoku-extension-lib';
 import React from 'react';
 import { SetterOrUpdater } from 'recoil';
 import { closeAllModals, openConfirmModal, openModal } from '@mantine/modals';
@@ -9,7 +9,7 @@ import { Button, Group, List, Text } from '@mantine/core';
 import { v4 as uuidv4 } from 'uuid';
 import { showNotification, updateNotification } from '@mantine/notifications';
 import { IconAlertTriangle, IconCheck, IconX } from '@tabler/icons';
-import { deleteThumbnail, getThumbnailPath } from '../../util/filesystem';
+import { deleteBook, deleteThumbnail, getThumbnailPath } from '../../util/filesystem';
 import { downloadCover } from '../../util/download';
 import { FS_METADATA } from '../../services/extensions/filesystem';
 import ipcChannels from '../../constants/ipcChannels.json';
@@ -46,6 +46,14 @@ export function loadChapterList(
 ) {
   const chapters: Chapter[] = library.fetchChapters(seriesId);
   setChapterList(chapters);
+}
+
+export function removeBook(book: Book, setBookList: (bookList: Book[]) => void) {
+  if (book.id === undefined) return;
+
+  library.removeBook(book);
+  deleteBook(book);
+  setBookList(library.fetchBookList());
 }
 
 export function removeSeries(series: Series, setSeriesList: (seriesList: Series[]) => void) {

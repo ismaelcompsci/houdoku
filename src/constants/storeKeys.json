@@ -11,5 +11,8 @@
     "READER_PREFIX": "reader-",
     "TRACKER_PREFIX": "tracker-",
     "INTEGRATION_PREFIX": "integration-"
+  },
+  "BOOKS": {
+    "SERIES_LIST": "book-series-list"
   }
 }

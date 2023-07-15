@@ -1,11 +1,18 @@
-import { Chapter, Series } from 'houdoku-extension-lib';
+import { Chapter, Series, Book } from 'houdoku-extension-lib';
 import { v4 as uuidv4 } from 'uuid';
+import fs from 'fs';
 import persistantStore from '../util/persistantStore';
 import storeKeys from '../constants/storeKeys.json';
 import { Category } from '../models/types';
+import { deleteBook } from '../util/filesystem';
 
 const fetchSeriesList = (): Series[] => {
   const val = persistantStore.read(`${storeKeys.LIBRARY.SERIES_LIST}`);
+  return val === null ? [] : JSON.parse(val);
+};
+
+const fetchBookList = (): Book[] => {
+  const val = persistantStore.read(`${storeKeys.BOOKS.SERIES_LIST}`);
   return val === null ? [] : JSON.parse(val);
 };
 
@@ -37,6 +44,19 @@ const upsertSeries = (series: Series): Series => {
   return newSeries;
 };
 
+const upsertBook = (book: Book): Book => {
+  const seriesId = book.id ? book.id : uuidv4();
+  const newBook: Book = { ...book, id: seriesId };
+
+  const existingList = fetchBookList().filter((s: Book) => s.id !== newBook.id);
+
+  persistantStore.write(
+    `${storeKeys.BOOKS.SERIES_LIST}`,
+    JSON.stringify([...existingList, newBook])
+  );
+  return newBook;
+};
+
 const upsertChapters = (chapters: Chapter[], series: Series): void => {
   if (series.id === undefined) return;
 
@@ -59,6 +79,13 @@ const upsertChapters = (chapters: Chapter[], series: Series): void => {
   persistantStore.write(
     `${storeKeys.LIBRARY.CHAPTER_LIST_PREFIX}${series.id}`,
     JSON.stringify(Object.values(chapterMap))
+  );
+};
+
+const removeBook = (book: Book): void => {
+  persistantStore.write(
+    `${storeKeys.BOOKS.SERIES_LIST}`,
+    JSON.stringify(fetchBookList().filter((s: Book) => s.id !== book.id))
   );
 };
 
@@ -107,6 +134,7 @@ const removeCategory = (categoryId: string): void => {
 
 export default {
   fetchSeriesList,
+  fetchBookList,
   fetchSeries,
   fetchChapters,
   fetchChapter,
@@ -117,4 +145,6 @@ export default {
   fetchCategoryList,
   upsertCategory,
   removeCategory,
+  upsertBook,
+  removeBook,
 };

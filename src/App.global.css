@@ -41,3 +41,17 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #495057; /* gray 7 */
 }
+
+#viewer {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.epub-container {
+  overflow-anchor: none !important;
+}

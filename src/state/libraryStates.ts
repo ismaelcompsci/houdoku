@@ -1,4 +1,4 @@
-import { Chapter, ExtensionMetadata, Series } from 'houdoku-extension-lib';
+import { Book, Chapter, ExtensionMetadata, Series } from 'houdoku-extension-lib';
 import { atom, selector } from 'recoil';
 import { Category, ImportTask, TableColumnSortOrder } from '../models/types';
 import {
@@ -12,9 +12,20 @@ export const seriesListState = atom<Series[]>({
   default: [] as Series[],
 });
 
+// todo
+export const bookListState = atom<Book[]>({
+  key: 'bookSeriesList',
+  default: [] as Book[],
+});
+
 export const seriesState = atom({
   key: 'seriesState',
   default: undefined as Series | undefined,
+});
+
+export const bookState = atom({
+  key: 'bookState',
+  default: undefined as Book | undefined,
 });
 
 export const chapterListState = atom({
@@ -82,11 +93,24 @@ export const showingLibraryCtxMenuState = atom({
   default: false,
 });
 
+export const showingBookLibraryCtxMenuState = atom({
+  key: 'libraryShowingBookCtxMenuState',
+  default: false,
+});
+
 export const activeSeriesListState = selector({
   key: 'activeLibrarySeriesList',
   get: ({ get }) => {
     const seriesList = get(seriesListState);
     return seriesList.filter((series) => !series.preview);
+  },
+});
+
+export const activeBookListState = selector({
+  key: 'activeBookLibrarySeriesList',
+  get: ({ get }) => {
+    const bookList = get(bookListState);
+    return bookList;
   },
 });
 

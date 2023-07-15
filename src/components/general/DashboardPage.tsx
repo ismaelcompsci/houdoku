@@ -9,6 +9,7 @@ import {
   IconPuzzle,
   IconSettings,
   IconSquarePlus,
+  IconBook,
 } from '@tabler/icons';
 import { AppShell, Navbar } from '@mantine/core';
 import SeriesDetails from '../library/SeriesDetails';
@@ -22,6 +23,7 @@ import Extensions from '../extensions/Extensions';
 import Downloads from '../downloads/Downloads';
 import {
   activeSeriesListState,
+  bookListState,
   categoryListState,
   completedStartReloadState,
   importingState,
@@ -33,6 +35,7 @@ import library from '../../services/library';
 import { chapterLanguagesState, refreshOnStartState } from '../../state/settingStates';
 import DashboardSidebarLink from './DashboardSidebarLink';
 import { downloadCover } from '../../util/download';
+import Books from '../books/Books';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
@@ -47,6 +50,7 @@ const DashboardPage: React.FC<Props> = (props: Props) => {
   const [importQueue, setImportQueue] = useRecoilState(importQueueState);
   const [importing, setImporting] = useRecoilState(importingState);
   const categoryList = useRecoilValue(categoryListState);
+  const setBookList = useSetRecoilState(bookListState);
 
   useEffect(() => {
     if (refreshOnStart && !completedStartReload && activeSeriesList.length > 0) {
@@ -59,6 +63,7 @@ const DashboardPage: React.FC<Props> = (props: Props) => {
         categoryList
       ).catch((e) => log.error(e));
     }
+    // setBookList(library.fetchBookList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSeriesList]);
 
@@ -76,6 +81,7 @@ const DashboardPage: React.FC<Props> = (props: Props) => {
         })
         .catch((e) => log.error(e));
     }
+    setBookList(library.fetchBookList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [importQueue, importing]);
 
@@ -90,6 +96,12 @@ const DashboardPage: React.FC<Props> = (props: Props) => {
               color="orange"
               label="Library"
               route={routes.LIBRARY}
+            />
+            <DashboardSidebarLink
+              icon={<IconBook size={16} />}
+              color="cyan"
+              label="Books"
+              route={routes.EBOOKS}
             />
             <DashboardSidebarLink
               icon={<IconSquarePlus size={16} />}
@@ -138,6 +150,7 @@ const DashboardPage: React.FC<Props> = (props: Props) => {
         <Route path={`${routes.SEARCH}/*`} element={<Search />} />
         <Route path={`${routes.EXTENSIONS}/*`} element={<Extensions />} />
         <Route path={`${routes.DOWNLOADS}/*`} element={<Downloads />} />
+        <Route path={`${routes.EBOOKS}/*`} element={<Books />} />
         <Route path="*" element={<Library />} />
       </Routes>
     </AppShell>

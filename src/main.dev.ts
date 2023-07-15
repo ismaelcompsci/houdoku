@@ -31,6 +31,7 @@ const pluginsDir = path.join(app.getPath('userData'), 'plugins');
 const downloadsDir = path.join(app.getPath('userData'), 'downloads');
 const logsDir = path.join(app.getPath('userData'), 'logs');
 const extractDir = path.join(app.getPath('userData'), 'extracted');
+const booksDir = path.join(app.getPath('userData'), 'books');
 
 let mainWindow: BrowserWindow | null = null;
 let spoofWindow: BrowserWindow | null = null;
@@ -163,6 +164,10 @@ ipcMain.handle(ipcChannels.WINDOW.TOGGLE_FULLSCREEN, () => {
 
 ipcMain.handle(ipcChannels.GET_PATH.THUMBNAILS_DIR, () => {
   return thumbnailsDir;
+});
+
+ipcMain.handle(ipcChannels.GET_PATH.BOOKS_DIR, () => {
+  return booksDir;
 });
 
 ipcMain.handle(ipcChannels.GET_PATH.PLUGINS_DIR, () => {

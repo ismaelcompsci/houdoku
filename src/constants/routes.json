@@ -6,5 +6,8 @@
   "READER": "/reader",
   "SEARCH": "/search",
   "SERIES": "/series",
-  "SETTINGS": "/settings"
+  "SETTINGS": "/settings",
+  "EBOOKS": "/ebooks",
+  "BOOKREADER": "/bookreader"
+  
 }

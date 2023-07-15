@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import React from 'react';
-import { Chapter, Series } from 'houdoku-extension-lib';
+import { Chapter, Languages, Series } from 'houdoku-extension-lib';
 import { useRecoilValue } from 'recoil';
 import { sortedFilteredChapterListState } from '../../state/libraryStates';
 import { chapterListPageSizeState } from '../../state/settingStates';
@@ -28,7 +28,7 @@ const ChapterTableBody: React.FC<Props> = (props: Props) => {
 
     return curChapterList.map((chapter) => {
       if (!chapter.id) return '';
-
+      // TODO: PREF LENGUAGE
       return (
         <ChapterTableRow
           key={chapter.id}

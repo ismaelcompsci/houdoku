@@ -1,13 +1,13 @@
 import { ipcRenderer } from 'electron';
 import React, { useEffect, useState } from 'react';
-import { Series } from 'houdoku-extension-lib';
+import { Book, Series } from 'houdoku-extension-lib';
 import log from 'electron-log';
 import { Button, Loader } from '@mantine/core';
 import blankCover from '../../img/blank_cover.png';
 import ipcChannels from '../../constants/ipcChannels.json';
 
 type Props = {
-  series: Series;
+  series: Series | Book;
   url?: string;
   className?: string;
   style?: React.CSSProperties;
