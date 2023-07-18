@@ -17,6 +17,7 @@ import library from '../../services/library';
 import { getNumberUnreadChapters } from '../../util/comparison';
 import routes from '../../constants/routes.json';
 import { Category } from '../../models/types';
+import books from '../../services/books';
 
 const updateSeriesNumberUnread = (series: Series, chapterLanguages: LanguageKey[]) => {
   if (series.id !== undefined) {
@@ -51,9 +52,9 @@ export function loadChapterList(
 export function removeBook(book: Book, setBookList: (bookList: Book[]) => void) {
   if (book.id === undefined) return;
 
-  library.removeBook(book);
+  books.removeBook(book);
   deleteBook(book);
-  setBookList(library.fetchBookList());
+  setBookList(books.fetchBookList());
 }
 
 export function removeSeries(series: Series, setSeriesList: (seriesList: Series[]) => void) {

@@ -13,7 +13,7 @@ import {
 } from '../../state/settingStates';
 import styles from '../library/LibraryGrid.css';
 import ExtensionImage from '../general/ExtensionImage';
-import { bookListState, bookState } from '../../state/libraryStates';
+import { bookListState, bookState } from '../../state/bookStates';
 import { removeBook } from '../../features/library/utils';
 
 import routes from '../../constants/routes.json';
@@ -73,8 +73,6 @@ const BooksGrid: React.FC<Props> = (props: Props) => {
   const libraryColumns = useRecoilValue(libraryColumnsState);
   const setBookState = useSetRecoilState(bookState);
   const libraryView = useRecoilValue(bookLibraryViewState);
-
-  console.log(libraryView);
 
   // TODO Make Book remove value
   const confirmRemoveBook = useRecoilValue(confirmRemoveSeriesState);

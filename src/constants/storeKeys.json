@@ -9,6 +9,7 @@
   "SETTINGS": {
     "GENERAL_PREFIX": "general-",
     "READER_PREFIX": "reader-",
+    "BOOK_PREFIX": "book-",
     "TRACKER_PREFIX": "tracker-",
     "INTEGRATION_PREFIX": "integration-"
   },

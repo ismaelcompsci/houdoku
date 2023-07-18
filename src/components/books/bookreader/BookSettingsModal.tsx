@@ -1,12 +1,11 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
+
 import { Modal } from '@mantine/core';
 import { showingSettingsModalState } from '../../../state/bookStates';
+import BookSettings from '../../settings/BookSettings';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type Props = {};
-
-const ReaderSettingsModal: React.FC<Props> = (props: Props) => {
+const ReaderSettingsModal = () => {
   const [showingSettingsModal, setShowingSettingsModal] = useRecoilState(showingSettingsModalState);
 
   return (
@@ -17,8 +16,7 @@ const ReaderSettingsModal: React.FC<Props> = (props: Props) => {
       title="Book Settings"
       onClose={() => setShowingSettingsModal(!showingSettingsModal)}
     >
-      {/* TODO */}
-      HELLO
+      <BookSettings />
     </Modal>
   );
 };

@@ -2,12 +2,14 @@ import { LanguageKey, SeriesStatus } from 'houdoku-extension-lib';
 import { atom, AtomEffect, RecoilState } from 'recoil';
 import {
   getAllStoredSettings,
+  saveBookSetting,
   saveGeneralSetting,
   saveIntegrationSetting,
   saveReaderSetting,
   saveTrackerSetting,
 } from '../features/settings/utils';
 import {
+  BookSetting,
   DefaultSettings,
   GeneralSetting,
   IntegrationSetting,
@@ -25,7 +27,7 @@ import {
 const storedSettings = getAllStoredSettings();
 
 function atomFromSetting<T>(
-  setting: GeneralSetting | ReaderSetting | TrackerSetting | IntegrationSetting
+  setting: GeneralSetting | ReaderSetting | BookSetting | TrackerSetting | IntegrationSetting
 ): RecoilState<T> {
   const atomKey = `setting${setting}`;
   const defaultValue: T =
@@ -41,6 +43,8 @@ function atomFromSetting<T>(
           saveTrackerSetting(setting as TrackerSetting, value);
         } else if (setting in IntegrationSetting) {
           saveIntegrationSetting(setting as IntegrationSetting, value);
+        } else if (setting in BookSetting) {
+          saveBookSetting(setting as BookSetting, value);
         }
       });
     },
@@ -130,6 +134,8 @@ export const pageGapState = atomFromSetting<boolean>(ReaderSetting.PageGap);
 export const maxPageWidthState = atomFromSetting<number>(ReaderSetting.MaxPageWidth);
 export const offsetPagesState = atomFromSetting<OffsetPages>(ReaderSetting.OffsetPages);
 export const optimizeContrastState = atomFromSetting<boolean>(ReaderSetting.OptimizeContrast);
+
+export const bookThemeState = atomFromSetting<string>(BookSetting.Theme);
 
 export const trackerAutoUpdateState = atomFromSetting<boolean>(TrackerSetting.TrackerAutoUpdate);
 

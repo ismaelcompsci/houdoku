@@ -7,7 +7,7 @@ import { Button, Checkbox, Group, Modal, Text } from '@mantine/core';
 
 import routes from '../../constants/routes.json';
 import { removeBook } from '../../features/library/utils';
-import { bookListState } from '../../state/libraryStates';
+import { bookListState } from '../../state/bookStates';
 import { confirmRemoveSeriesState } from '../../state/settingStates';
 
 type Props = {

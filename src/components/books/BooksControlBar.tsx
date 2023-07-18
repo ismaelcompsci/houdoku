@@ -10,13 +10,12 @@ import {
   IconLayoutBottombar,
   IconLayoutGrid,
   IconLayoutList,
-  IconLetterA,
   IconPhoto,
 } from '@tabler/icons';
 
 import ipcChannels from '../../constants/ipcChannels.json';
-import { bookListState, showingBookLibraryCtxMenuState } from '../../state/libraryStates';
-import { handleBookAdded } from '../../util/bookActions';
+import { bookListState, showingBookLibraryCtxMenuState } from '../../state/bookStates';
+import { handleBookAdded } from '../../services/bookActions';
 import { bookLibraryViewState } from '../../state/settingStates';
 import { LibraryView } from '../../models/types';
 
@@ -24,7 +23,6 @@ const BooksControlBar = () => {
   const [bookList, setBookList] = useRecoilState(bookListState);
   const [libraryView, setLibraryView] = useRecoilState(bookLibraryViewState);
   const setShowingContextMenu = useSetRecoilState(showingBookLibraryCtxMenuState);
-  // const [libraryView, setLibraryView] = useRecoilState(libraryViewState);
 
   const handleAddBook = () => {
     ipcRenderer

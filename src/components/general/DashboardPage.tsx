@@ -23,7 +23,6 @@ import Extensions from '../extensions/Extensions';
 import Downloads from '../downloads/Downloads';
 import {
   activeSeriesListState,
-  bookListState,
   categoryListState,
   completedStartReloadState,
   importingState,
@@ -36,6 +35,8 @@ import { chapterLanguagesState, refreshOnStartState } from '../../state/settingS
 import DashboardSidebarLink from './DashboardSidebarLink';
 import { downloadCover } from '../../util/download';
 import Books from '../books/Books';
+import { bookListState } from '../../state/bookStates';
+import books from '../../services/books';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
@@ -81,7 +82,7 @@ const DashboardPage: React.FC<Props> = (props: Props) => {
         })
         .catch((e) => log.error(e));
     }
-    setBookList(library.fetchBookList());
+    setBookList(books.fetchBookList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [importQueue, importing]);
 

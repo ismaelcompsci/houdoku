@@ -9,21 +9,25 @@ import {
   ReadingDirection,
   PageStyle,
   OffsetPages,
+  BookSetting,
 } from '../../models/types';
 import persistantStore from '../../util/persistantStore';
 import storeKeys from '../../constants/storeKeys.json';
 
 type StoreValues = {
-  [key in GeneralSetting | ReaderSetting | TrackerSetting | IntegrationSetting]?: string | null;
+  [key in GeneralSetting | ReaderSetting | BookSetting | TrackerSetting | IntegrationSetting]?:
+    | string
+    | null;
 };
 
-type Setting = GeneralSetting | ReaderSetting | TrackerSetting | IntegrationSetting;
+type Setting = GeneralSetting | ReaderSetting | BookSetting | TrackerSetting | IntegrationSetting;
 
 type SettingEnum =
   | typeof GeneralSetting
   | typeof ReaderSetting
   | typeof TrackerSetting
-  | typeof IntegrationSetting;
+  | typeof IntegrationSetting
+  | typeof BookSetting;
 
 const getStoreValues = (storePrefix: string, settingEnum: SettingEnum): StoreValues => {
   const values: StoreValues = {};
@@ -63,6 +67,7 @@ export const getAllStoredSettings = () => {
   const settings = {
     ...parseStoreValues(getStoreValues(storeKeys.SETTINGS.GENERAL_PREFIX, GeneralSetting)),
     ...parseStoreValues(getStoreValues(storeKeys.SETTINGS.READER_PREFIX, ReaderSetting)),
+    ...parseStoreValues(getStoreValues(storeKeys.SETTINGS.BOOK_PREFIX, BookSetting)),
     ...parseStoreValues(getStoreValues(storeKeys.SETTINGS.TRACKER_PREFIX, TrackerSetting)),
     ...parseStoreValues(getStoreValues(storeKeys.SETTINGS.INTEGRATION_PREFIX, IntegrationSetting)),
   };
@@ -79,6 +84,11 @@ export function saveGeneralSetting(key: GeneralSetting, value: any) {
 export function saveReaderSetting(key: ReaderSetting, value: any) {
   persistantStore.write(`${storeKeys.SETTINGS.READER_PREFIX}${key}`, value);
   log.info(`Set ReaderSetting ${key} to ${value}`);
+}
+
+export function saveBookSetting(key: BookSetting, value: any) {
+  persistantStore.write(`${storeKeys.SETTINGS.BOOK_PREFIX}${key}`, value);
+  log.info(`Set BookSetting ${key} to ${value}`);
 }
 
 export function saveTrackerSetting(key: TrackerSetting, value: any) {

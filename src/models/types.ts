@@ -119,6 +119,10 @@ export enum LibraryView {
   List = 'LIST',
 }
 
+export enum BookSetting {
+  Theme = 'Theme',
+}
+
 export enum ReaderSetting {
   FitContainToWidth = 'FitContainToWidth',
   FitContainToHeight = 'FitContainToHeight',
@@ -193,6 +197,7 @@ export const SettingTypes = {
   [GeneralSetting.CustomDownloadsDir]: SettingType.STRING,
   [GeneralSetting.LibraryColumns]: SettingType.NUMBER,
   [GeneralSetting.LibraryView]: SettingType.STRING,
+  [GeneralSetting.BookLibraryView]: SettingType.STRING,
   [GeneralSetting.LibrarySort]: SettingType.STRING,
   [GeneralSetting.LibraryFilterStatus]: SettingType.STRING,
   [GeneralSetting.LibraryFilterProgress]: SettingType.STRING,
@@ -228,6 +233,8 @@ export const SettingTypes = {
   [ReaderSetting.KeyExit]: SettingType.STRING,
   [ReaderSetting.KeyCloseOrBack]: SettingType.STRING,
   [ReaderSetting.KeyToggleOffsetDoubleSpreads]: SettingType.STRING,
+
+  [BookSetting.Theme]: SettingType.STRING,
 
   [TrackerSetting.TrackerAutoUpdate]: SettingType.BOOLEAN,
 
@@ -279,6 +286,8 @@ export const DefaultSettings = {
   [ReaderSetting.KeyExit]: 'backspace',
   [ReaderSetting.KeyCloseOrBack]: 'escape',
   [ReaderSetting.KeyToggleOffsetDoubleSpreads]: 'u',
+
+  [BookSetting.Theme]: 'dark',
 
   [TrackerSetting.TrackerAutoUpdate]: true,
 

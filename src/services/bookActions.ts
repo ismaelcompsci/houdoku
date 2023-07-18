@@ -9,8 +9,8 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 import ipcChannels from '../constants/ipcChannels.json';
-import library from '../services/library';
-import { sanitizeFilename } from './filesystem';
+import { sanitizeFilename } from '../util/filesystem';
+import books from './books';
 
 export function blobToBuffer(blob: Blob): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -23,7 +23,6 @@ export function blobToBuffer(blob: Blob): Promise<Buffer> {
     function onLoadEnd(e: ProgressEvent<FileReader>) {
       reader.removeEventListener('loadend', onLoadEnd, false);
       if (e.target?.error) {
-        // ??
         reject(e.target?.error);
       } else {
         resolve(Buffer.from(reader.result as ArrayBuffer));
@@ -92,6 +91,8 @@ export async function handleBookAdded(bookPath: string): Promise<Book | undefine
 
     const { finalBookPath } = await saveBook(meta, bookPath, bookDir);
 
+    const toc = book.navigation.toc.flat();
+
     const bookInfo = {
       id: uuidv4(),
       title: meta.title,
@@ -100,11 +101,12 @@ export async function handleBookAdded(bookPath: string): Promise<Book | undefine
       desciption: meta.description,
       identifer: meta.identifier,
       path: finalBookPath,
+      toc,
       coverPath,
       highlights: [],
     };
 
-    library.upsertBook(bookInfo);
+    books.upsertBook(bookInfo);
     return bookInfo;
   } catch (err) {
     log.error(err, 'COULD NOT PARSE EPUB BOOK');

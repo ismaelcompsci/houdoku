@@ -33,7 +33,7 @@ import storeKeys from './constants/storeKeys.json';
 import { TrackerMetadata } from './models/types';
 import { migrateSeriesTags } from './features/library/utils';
 import AppLoading from './components/general/AppLoading';
-import { bookListState, categoryListState, seriesListState } from './state/libraryStates';
+import { categoryListState, seriesListState } from './state/libraryStates';
 import { downloaderClient } from './services/downloader';
 import {
   currentTaskState,
@@ -45,6 +45,8 @@ import { autoCheckForExtensionUpdatesState, autoCheckForUpdatesState } from './s
 import { ErrorBoundary } from './components/general/ErrorBoundary';
 import library from './services/library';
 import BookReaderPage from './components/books/bookreader/BookReaderPage';
+import { bookListState } from './state/bookStates';
+import books from './services/books';
 
 const loadStoredExtensionSettings = () => {
   log.info('Loading stored extension settings...');
@@ -253,7 +255,7 @@ export default function App() {
       }
 
       setSeriesList(library.fetchSeriesList());
-      setBookList(library.fetchBookList());
+      setBookList(books.fetchBookList());
       setCategoryList(library.fetchCategoryList());
       setLoading(false);
     }

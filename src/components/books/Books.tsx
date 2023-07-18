@@ -2,7 +2,7 @@ import { ScrollArea, Text } from '@mantine/core';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Book } from 'houdoku-extension-lib';
-import { bookListState } from '../../state/libraryStates';
+import { bookListState } from '../../state/bookStates';
 import BooksControlBar from './BooksControlBar';
 import BooksGrid from './BooksGrid';
 import RemoveBookModal from './RemoveBookModal';
