@@ -11,6 +11,8 @@ import { bookPageStyleState, bookThemeState } from '../../../state/settingStates
 import BookReaderHeader from './BookReaderHeader';
 import styles from './bookReaderPage.css';
 import BookSettingsModal from './BookSettingsModal';
+import { flatten, getNavItemByHref } from '../../../util/bookUtils';
+import { updateTitlebarText } from '../../../util/titlebar';
 
 const darkTheme = {
   background: '#1A1B1E',
@@ -37,6 +39,7 @@ const BookReaderPage = () => {
 
   const [currentChapter, setCurrentChapter] = useState<string | undefined>(undefined);
   const [bookInfo, setBookInfo] = useRecoilState(bookState);
+
   const setToc = useSetRecoilState(bookChapterListState);
 
   const bookTheme = useRecoilValue(bookThemeState);
@@ -46,45 +49,34 @@ const BookReaderPage = () => {
     navigate(`${routes.EBOOKS}`);
   };
 
+  const nextPage = () => {
+    renditionRef.current?.next();
+  };
+
+  const prevPage = () => {
+    renditionRef.current?.prev();
+  };
+
   const loadToc = (nav: NavItem[]) => {
-    const flatten = (items: NavItem[]): NavItem[] => {
-      return ([] as NavItem[]).concat(
-        ...items.map((item) => [item, ...flatten(item.subitems || [])])
-      );
-    };
     setToc(flatten(nav));
+  };
+
+  const getLabelFromLocation = () => {
+    const toc = renditionRef.current?.book.navigation.toc;
+    const book = renditionRef.current?.book;
+    // @ts-expect-error wrong type set
+    const loc = (renditionRef.current?.currentLocation() as Location).start.href;
+
+    return getNavItemByHref(loc, toc, book)?.label;
   };
 
   const locationChanged = (value: string | number) => {
     if (bookInfo) {
       books.upsertBook({ ...bookInfo, currentCfi: value });
     }
-    const toc = renditionRef.current?.book.navigation.toc;
-    const book = renditionRef.current?.book;
 
-    const getNavItemByHref = (href: string) => {
-      if (!toc && !book) {
-        return null;
-      }
-
-      const flatten = (arr: NavItem[]): NavItem[] => {
-        return arr.reduce(
-          (result: NavItem[], item) => [...result, item, ...flatten(item.subitems || [])],
-
-          []
-        );
-      };
-
-      const matchingItem = flatten(toc!).find(
-        (item) => book!.canonical(item.href) === book!.canonical(href)
-      );
-
-      return matchingItem || null;
-    };
-    // @ts-expect-error wrong type
-    const loc = (renditionRef.current?.currentLocation() as Location).start.href;
-
-    setCurrentChapter(getNavItemByHref(loc)?.label);
+    const labelFromLocation = getLabelFromLocation();
+    setCurrentChapter(labelFromLocation);
   };
 
   const setChapter = (item: NavItem) => {
@@ -101,10 +93,21 @@ const BookReaderPage = () => {
   }, [pageStyle]);
 
   useEffect(() => {
+    if (currentChapter) {
+      updateTitlebarText(`${bookInfo?.title} - ${currentChapter}`);
+      return;
+    }
+    updateTitlebarText(`${bookInfo?.title}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentChapter, bookInfo]);
+
+  useEffect(() => {
+    // get book if the page is refreshed
     if (!bookInfo) {
       getBook();
-    } // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bookInfo]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     renditionRef.current?.themes.select(bookTheme);
@@ -123,6 +126,8 @@ const BookReaderPage = () => {
         exitPage={exitPage}
         setChapter={setChapter}
         currentChapter={currentChapter}
+        nextPage={nextPage}
+        prevPage={prevPage}
       />
       <div className={styles.reader}>
         {bookInfo ? (

@@ -1,7 +1,7 @@
 import { Box, Button, Center, Group, MantineTheme, Menu, ScrollArea } from '@mantine/core';
 import React from 'react';
 
-import { IconArrowLeft, IconSettings } from '@tabler/icons';
+import { IconArrowLeft, IconChevronLeft, IconChevronRight, IconSettings } from '@tabler/icons';
 import { constSelector, useRecoilState, useRecoilValue } from 'recoil';
 import { NavItem } from 'epubjs';
 import styles from './BookReaderHeader.css';
@@ -10,11 +10,19 @@ import { bookChapterListState, showingSettingsModalState } from '../../../state/
 //  eslint-disable-next-line
 type Props = {
   exitPage: () => void;
+  nextPage: () => void;
+  prevPage: () => void;
   setChapter: (item: NavItem) => void;
   currentChapter: string | undefined;
 };
 
-const BookReaderHeader: React.FC<Props> = ({ exitPage, setChapter, currentChapter }) => {
+const BookReaderHeader: React.FC<Props> = ({
+  exitPage,
+  prevPage,
+  nextPage,
+  setChapter,
+  currentChapter,
+}) => {
   const [showingSettingsModal, setShowingSettingsModal] = useRecoilState(showingSettingsModalState);
   const bookToc = useRecoilValue(bookChapterListState);
 
@@ -55,6 +63,14 @@ const BookReaderHeader: React.FC<Props> = ({ exitPage, setChapter, currentChapte
             Go Back
           </Button>
 
+          <Button
+            px={2}
+            compact
+            styles={buttonStyles}
+            radius={0}
+            rightIcon={<IconChevronLeft size={16} />}
+            onClick={() => prevPage()}
+          />
           {bookToc.length !== 0 && (
             <Menu shadow="md" width={200} trigger="hover">
               <Menu.Target>
@@ -81,6 +97,15 @@ const BookReaderHeader: React.FC<Props> = ({ exitPage, setChapter, currentChapte
               </Menu.Dropdown>
             </Menu>
           )}
+
+          <Button
+            px={2}
+            compact
+            styles={buttonStyles}
+            radius={0}
+            rightIcon={<IconChevronRight size={16} />}
+            onClick={() => nextPage()}
+          />
 
           <Button
             compact
