@@ -9,6 +9,7 @@ import {
   saveTrackerSetting,
 } from '../features/settings/utils';
 import {
+  BookPageStyle,
   BookSetting,
   DefaultSettings,
   GeneralSetting,
@@ -72,8 +73,6 @@ export const confirmRemoveSeriesState = atomFromSetting<boolean>(
   GeneralSetting.ConfirmRemoveSeries
 );
 
-export const bookLibraryViewState = atomFromSetting<LibraryView>(GeneralSetting.BookLibraryView);
-
 export const customDownloadsDirState = atomFromSetting<string>(GeneralSetting.CustomDownloadsDir);
 export const libraryColumnsState = atomFromSetting<number>(GeneralSetting.LibraryColumns);
 export const libraryViewState = atomFromSetting<LibraryView>(GeneralSetting.LibraryView);
@@ -135,11 +134,16 @@ export const maxPageWidthState = atomFromSetting<number>(ReaderSetting.MaxPageWi
 export const offsetPagesState = atomFromSetting<OffsetPages>(ReaderSetting.OffsetPages);
 export const optimizeContrastState = atomFromSetting<boolean>(ReaderSetting.OptimizeContrast);
 
-export const bookThemeState = atomFromSetting<string>(BookSetting.Theme);
-
 export const trackerAutoUpdateState = atomFromSetting<boolean>(TrackerSetting.TrackerAutoUpdate);
 
 export const discordPresenceEnabledState = atomFromSetting<boolean>(
   IntegrationSetting.DiscordPresenceEnabled
 );
+
+/* Book States */
+export const bookThemeState = atomFromSetting<string>(BookSetting.Theme);
+export const bookPageStyleState = atomFromSetting<BookPageStyle>(BookSetting.PageStyle);
+export const bookLibraryViewState = atomFromSetting<LibraryView>(GeneralSetting.BookLibraryView);
+/* End book states */
+
 /* eslint-enable */

@@ -1,17 +1,21 @@
 import React, { FC } from 'react';
-import { Text, Box, Center, SegmentedControl } from '@mantine/core';
-import { IconMoon, IconSun } from '@tabler/icons';
+import { Text, Box, Center, SegmentedControl, Checkbox } from '@mantine/core';
+import { IconFile, IconMoon, IconSpacingVertical, IconSun } from '@tabler/icons';
 import { useRecoilState } from 'recoil';
-import { bookThemeState } from '../../state/settingStates';
-import { BookSetting } from '../../models/types';
+import { bookPageStyleState, bookThemeState } from '../../state/settingStates';
+import { BookPageStyle, BookSetting } from '../../models/types';
 
 const BookSettings = () => {
   const [bookTheme, setBookTheme] = useRecoilState(bookThemeState);
+  const [pageStyle, setPageStyle] = useRecoilState(bookPageStyleState);
 
   const updateBookSetting = (bookSetting: BookSetting, value: any) => {
     switch (bookSetting) {
       case BookSetting.Theme:
         setBookTheme(value);
+        break;
+      case BookSetting.PageStyle:
+        setPageStyle(value);
         break;
       default:
         break;
@@ -45,6 +49,33 @@ const BookSettings = () => {
         ]}
         value={bookTheme}
         onChange={(value) => updateBookSetting(BookSetting.Theme, value)}
+      />
+      <Text pb="xs">Page Style</Text>
+      <SegmentedControl
+        mb="xs"
+        data={[
+          {
+            value: BookPageStyle.Single,
+            label: (
+              <Center>
+                <IconFile size={16} />
+                <Box ml={10}>Single</Box>
+              </Center>
+            ),
+          },
+
+          {
+            value: BookPageStyle.LongStrip,
+            label: (
+              <Center>
+                <IconSpacingVertical size={16} />
+                <Box ml={10}>Long Strip</Box>
+              </Center>
+            ),
+          },
+        ]}
+        value={pageStyle}
+        onChange={(value) => updateBookSetting(BookSetting.PageStyle, value)}
       />
     </>
   );

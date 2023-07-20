@@ -8,6 +8,11 @@ const fetchBookList = (): Book[] => {
   return val === null ? [] : JSON.parse(val);
 };
 
+const fetchBook = (bookId: string): Book | null => {
+  const book: Book | undefined = fetchBookList().find((s) => s.id === bookId);
+  return book || null;
+};
+
 const upsertBook = (book: Book): Book => {
   const seriesId = book.id ? book.id : uuidv4();
   const newBook: Book = { ...book, id: seriesId };
@@ -32,4 +37,5 @@ export default {
   removeBook,
   upsertBook,
   fetchBookList,
+  fetchBook,
 };

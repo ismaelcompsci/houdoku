@@ -91,7 +91,7 @@ export async function handleBookAdded(bookPath: string): Promise<Book | undefine
 
     const { finalBookPath } = await saveBook(meta, bookPath, bookDir);
 
-    const toc = book.navigation.toc.flat();
+    // const toc = book.navigation.toc.flat();
 
     const bookInfo = {
       id: uuidv4(),
@@ -101,9 +101,9 @@ export async function handleBookAdded(bookPath: string): Promise<Book | undefine
       desciption: meta.description,
       identifer: meta.identifier,
       path: finalBookPath,
-      toc,
       coverPath,
       highlights: [],
+      currentCfi: '',
     };
 
     books.upsertBook(bookInfo);

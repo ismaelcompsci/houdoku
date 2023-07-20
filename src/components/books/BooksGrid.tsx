@@ -62,7 +62,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 type Props = {
-  bookList: Book[];
+  getFilteredList: () => Book[];
   showRemoveModal: (book: Book) => void;
 };
 
@@ -93,7 +93,7 @@ const BooksGrid: React.FC<Props> = (props: Props) => {
   return (
     <>
       <SimpleGrid cols={libraryColumns} spacing="xs">
-        {props.bookList.map((book: Book) => {
+        {props.getFilteredList().map((book: Book) => {
           const coverSource = book.coverPath;
 
           return (

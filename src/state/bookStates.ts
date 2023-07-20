@@ -1,3 +1,4 @@
+import { NavItem } from 'epubjs';
 import { Book } from 'houdoku-extension-lib/dist/types';
 import { atom, selector } from 'recoil';
 
@@ -29,4 +30,9 @@ export const activeBookListState = selector({
 export const showingBookLibraryCtxMenuState = atom({
   key: 'libraryShowingBookCtxMenuState',
   default: false,
+});
+
+export const bookChapterListState = atom({
+  key: 'bookChapterList',
+  default: [] as NavItem[],
 });

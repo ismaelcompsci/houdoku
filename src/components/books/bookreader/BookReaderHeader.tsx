@@ -1,18 +1,22 @@
-import { Box, Button, Center, Group, MantineTheme } from '@mantine/core';
+import { Box, Button, Center, Group, MantineTheme, Menu, ScrollArea } from '@mantine/core';
 import React from 'react';
 
 import { IconArrowLeft, IconSettings } from '@tabler/icons';
-import { useRecoilState } from 'recoil';
+import { constSelector, useRecoilState, useRecoilValue } from 'recoil';
+import { NavItem } from 'epubjs';
 import styles from './BookReaderHeader.css';
-import { showingSettingsModalState } from '../../../state/bookStates';
+import { bookChapterListState, showingSettingsModalState } from '../../../state/bookStates';
 
 //  eslint-disable-next-line
 type Props = {
   exitPage: () => void;
+  setChapter: (item: NavItem) => void;
+  currentChapter: string | undefined;
 };
 
-const BookReaderHeader: React.FC<Props> = ({ exitPage }) => {
+const BookReaderHeader: React.FC<Props> = ({ exitPage, setChapter, currentChapter }) => {
   const [showingSettingsModal, setShowingSettingsModal] = useRecoilState(showingSettingsModalState);
+  const bookToc = useRecoilValue(bookChapterListState);
 
   const buttonStyles = (theme: MantineTheme) => ({
     root: {
@@ -50,6 +54,33 @@ const BookReaderHeader: React.FC<Props> = ({ exitPage }) => {
           >
             Go Back
           </Button>
+
+          {bookToc.length !== 0 && (
+            <Menu shadow="md" width={200} trigger="hover">
+              <Menu.Target>
+                <Button compact styles={buttonStyles} radius={0} pb={2}>
+                  {currentChapter || 'Contents'}
+                </Button>
+              </Menu.Target>
+
+              <Menu.Dropdown>
+                <ScrollArea.Autosize maxHeight={220} style={{ width: '100%' }}>
+                  {bookToc.map((relevantChapter: NavItem) => {
+                    return (
+                      <Menu.Item
+                        key={relevantChapter.id}
+                        onClick={() => {
+                          setChapter(relevantChapter);
+                        }}
+                      >
+                        {`${relevantChapter.label}`}
+                      </Menu.Item>
+                    );
+                  })}
+                </ScrollArea.Autosize>
+              </Menu.Dropdown>
+            </Menu>
+          )}
 
           <Button
             compact

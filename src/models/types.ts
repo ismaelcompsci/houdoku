@@ -121,6 +121,7 @@ export enum LibraryView {
 
 export enum BookSetting {
   Theme = 'Theme',
+  PageStyle = 'PageStyle',
 }
 
 export enum ReaderSetting {
@@ -170,6 +171,10 @@ export enum PageStyle {
   Single = 'Single',
   Double = 'Double',
   LongStrip = 'LongStrip',
+}
+export enum BookPageStyle {
+  Single = 'paginated',
+  LongStrip = 'scrolled',
 }
 
 export enum OffsetPages {

@@ -2,7 +2,7 @@ import { ScrollArea, Text } from '@mantine/core';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { Book } from 'houdoku-extension-lib';
-import { bookListState } from '../../state/bookStates';
+import { activeBookListState } from '../../state/bookStates';
 import BooksControlBar from './BooksControlBar';
 import BooksGrid from './BooksGrid';
 import RemoveBookModal from './RemoveBookModal';
@@ -12,7 +12,7 @@ type Props = unknown;
 const Books: React.FC<Props> = () => {
   const [removeModalShowing, setRemoveModalShowing] = useState(false);
   const [removeModalBook, setRemoveModalBook] = useState<Book | null>(null);
-  const bookList = useRecoilValue(bookListState);
+  const bookList = useRecoilValue(activeBookListState);
 
   const renderEmptyMessage = () => {
     return (
@@ -24,6 +24,16 @@ const Books: React.FC<Props> = () => {
         to your Books library
       </Text>
     );
+  };
+
+  const getFilteredList = () => {
+    const filteredList = bookList.filter((book: Book) => {
+      if (!book) return false;
+      return true;
+    });
+
+    //  sort by title desc
+    return filteredList.sort((a: Book, b: Book) => a.title.localeCompare(b.title));
   };
 
   return (
@@ -38,7 +48,7 @@ const Books: React.FC<Props> = () => {
               close={() => setRemoveModalShowing(false)}
             />
             <BooksGrid
-              bookList={bookList}
+              getFilteredList={getFilteredList}
               showRemoveModal={(book) => {
                 setRemoveModalBook(book);
                 setRemoveModalShowing(true);
