@@ -8,6 +8,7 @@ import { GeneralSetting } from '../../models/types';
 import ipcChannels from '../../constants/ipcChannels.json';
 import { createBackup, restoreBackup } from '../../util/backup';
 import {
+  activateEpubSupportState,
   autoCheckForExtensionUpdatesState,
   autoCheckForUpdatesState,
   chapterLanguagesState,
@@ -34,6 +35,7 @@ const GeneralSettings: React.FC<Props> = (props: Props) => {
   );
   const [confirmRemoveSeries, setConfirmRemoveSeries] = useRecoilState(confirmRemoveSeriesState);
   const [customDownloadsDir, setCustomDownloadsDir] = useRecoilState(customDownloadsDirState);
+  const [activateEpubSuppot, setActiveEpubSupport] = useRecoilState(activateEpubSupportState);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateGeneralSetting = (generalSetting: GeneralSetting, value: any) => {
@@ -55,6 +57,9 @@ const GeneralSettings: React.FC<Props> = (props: Props) => {
         break;
       case GeneralSetting.CustomDownloadsDir:
         setCustomDownloadsDir(value);
+        break;
+      case GeneralSetting.EPUBSupport:
+        setActiveEpubSupport(value);
         break;
       default:
         break;
@@ -80,6 +85,20 @@ const GeneralSettings: React.FC<Props> = (props: Props) => {
           onChange={(e) =>
             updateGeneralSetting(GeneralSetting.AutoCheckForExtensionUpdates, e.target.checked)
           }
+        />
+        <Checkbox
+          label={
+            <>
+              Activate{' '}
+              <Text component="span" color="teal" weight={700}>
+                EPUB
+              </Text>{' '}
+              support
+            </>
+          }
+          size="md"
+          checked={activateEpubSuppot}
+          onChange={(e) => updateGeneralSetting(GeneralSetting.EPUBSupport, e.target.checked)}
         />
       </Stack>
 

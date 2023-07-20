@@ -15,13 +15,26 @@ import { flatten, getNavItemByHref } from '../../../util/bookUtils';
 import { updateTitlebarText } from '../../../util/titlebar';
 
 const darkTheme = {
-  background: '#1A1B1E',
-  color: '#fff',
+  body: {
+    background: '#1A1B1E',
+    color: '#fff',
+  },
+  a: {
+    color: '#0284c7',
+  },
+  'a:hover': {
+    color: '#082f49 !important',
+  },
 };
 
 const lightTheme = {
-  background: '#ffffff',
-  color: '#09090b',
+  body: {
+    background: '#fff',
+    color: '#09090b',
+  },
+  a: {
+    color: '#1e83d2',
+  },
 };
 
 type ParamTypes = {
@@ -150,10 +163,10 @@ const BookReaderPage = () => {
                 renditionRef.current = rendition;
                 renditionRef.current.themes.fontSize('140%');
                 renditionRef.current.themes.register('dark', {
-                  body: darkTheme,
+                  ...darkTheme,
                 });
                 renditionRef.current.themes.register('light', {
-                  body: lightTheme,
+                  ...lightTheme,
                 });
                 renditionRef.current.themes.select(bookTheme);
 

@@ -81,6 +81,7 @@ export type Category = {
 };
 
 export enum GeneralSetting {
+  EPUBSupport = 'EPUBSupport',
   ChapterLanguages = 'ChapterLanguages',
   RefreshOnStart = 'RefreshOnStart',
   AutoCheckForUpdates = 'AutoCheckForUpdates',
@@ -121,7 +122,7 @@ export enum LibraryView {
 
 export enum BookSetting {
   Theme = 'Theme',
-  PageStyle = 'PageStyle',
+  BookPageStyle = 'BookPageStyle',
 }
 
 export enum ReaderSetting {
@@ -240,6 +241,8 @@ export const SettingTypes = {
   [ReaderSetting.KeyToggleOffsetDoubleSpreads]: SettingType.STRING,
 
   [BookSetting.Theme]: SettingType.STRING,
+  [BookSetting.BookPageStyle]: SettingType.STRING,
+  [GeneralSetting.EPUBSupport]: SettingType.BOOLEAN,
 
   [TrackerSetting.TrackerAutoUpdate]: SettingType.BOOLEAN,
 
@@ -255,7 +258,6 @@ export const DefaultSettings = {
   [GeneralSetting.CustomDownloadsDir]: '',
   [GeneralSetting.LibraryColumns]: 4,
   [GeneralSetting.LibraryView]: LibraryView.GridCompact,
-  [GeneralSetting.BookLibraryView]: LibraryView.GridCompact,
   [GeneralSetting.LibrarySort]: LibrarySort.TitleAsc,
   [GeneralSetting.LibraryFilterStatus]: null,
   [GeneralSetting.LibraryFilterProgress]: ProgressFilter.All,
@@ -292,7 +294,10 @@ export const DefaultSettings = {
   [ReaderSetting.KeyCloseOrBack]: 'escape',
   [ReaderSetting.KeyToggleOffsetDoubleSpreads]: 'u',
 
+  [GeneralSetting.EPUBSupport]: false,
   [BookSetting.Theme]: 'dark',
+  [BookSetting.BookPageStyle]: BookPageStyle.LongStrip,
+  [GeneralSetting.BookLibraryView]: LibraryView.GridCompact,
 
   [TrackerSetting.TrackerAutoUpdate]: true,
 

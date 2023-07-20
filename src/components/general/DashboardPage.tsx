@@ -31,7 +31,11 @@ import {
   seriesListState,
 } from '../../state/libraryStates';
 import library from '../../services/library';
-import { chapterLanguagesState, refreshOnStartState } from '../../state/settingStates';
+import {
+  activateEpubSupportState,
+  chapterLanguagesState,
+  refreshOnStartState,
+} from '../../state/settingStates';
 import DashboardSidebarLink from './DashboardSidebarLink';
 import { downloadCover } from '../../util/download';
 import Books from '../books/Books';
@@ -52,6 +56,7 @@ const DashboardPage: React.FC<Props> = (props: Props) => {
   const [importing, setImporting] = useRecoilState(importingState);
   const categoryList = useRecoilValue(categoryListState);
   const setBookList = useSetRecoilState(bookListState);
+  const activateEpubSupport = useRecoilValue(activateEpubSupportState);
 
   useEffect(() => {
     if (refreshOnStart && !completedStartReload && activeSeriesList.length > 0) {
@@ -98,12 +103,14 @@ const DashboardPage: React.FC<Props> = (props: Props) => {
               label="Library"
               route={routes.LIBRARY}
             />
-            <DashboardSidebarLink
-              icon={<IconBook size={16} />}
-              color="cyan"
-              label="Books"
-              route={routes.EBOOKS}
-            />
+            {activateEpubSupport && (
+              <DashboardSidebarLink
+                icon={<IconBook size={16} />}
+                color="cyan"
+                label="Books"
+                route={routes.EBOOKS}
+              />
+            )}
             <DashboardSidebarLink
               icon={<IconSquarePlus size={16} />}
               color="teal"
@@ -151,7 +158,7 @@ const DashboardPage: React.FC<Props> = (props: Props) => {
         <Route path={`${routes.SEARCH}/*`} element={<Search />} />
         <Route path={`${routes.EXTENSIONS}/*`} element={<Extensions />} />
         <Route path={`${routes.DOWNLOADS}/*`} element={<Downloads />} />
-        <Route path={`${routes.EBOOKS}/*`} element={<Books />} />
+        {activateEpubSupport && <Route path={`${routes.EBOOKS}/*`} element={<Books />} />}
         <Route path="*" element={<Library />} />
       </Routes>
     </AppShell>

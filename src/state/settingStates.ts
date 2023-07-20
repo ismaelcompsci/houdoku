@@ -141,8 +141,10 @@ export const discordPresenceEnabledState = atomFromSetting<boolean>(
 );
 
 /* Book States */
+
+export const activateEpubSupportState = atomFromSetting<boolean>(GeneralSetting.EPUBSupport);
 export const bookThemeState = atomFromSetting<string>(BookSetting.Theme);
-export const bookPageStyleState = atomFromSetting<BookPageStyle>(BookSetting.PageStyle);
+export const bookPageStyleState = atomFromSetting<BookPageStyle>(BookSetting.BookPageStyle);
 export const bookLibraryViewState = atomFromSetting<LibraryView>(GeneralSetting.BookLibraryView);
 /* End book states */
 
