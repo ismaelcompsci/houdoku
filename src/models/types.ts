@@ -82,6 +82,7 @@ export type Category = {
 
 export enum GeneralSetting {
   EPUBSupport = 'EPUBSupport',
+  BookLibrarySort = 'BookLibrarySort',
   ChapterLanguages = 'ChapterLanguages',
   RefreshOnStart = 'RefreshOnStart',
   AutoCheckForUpdates = 'AutoCheckForUpdates',
@@ -298,6 +299,7 @@ export const DefaultSettings = {
   [BookSetting.Theme]: 'dark',
   [BookSetting.BookPageStyle]: BookPageStyle.LongStrip,
   [GeneralSetting.BookLibraryView]: LibraryView.GridCompact,
+  [GeneralSetting.BookLibrarySort]: LibrarySort.TitleAsc,
 
   [TrackerSetting.TrackerAutoUpdate]: true,
 

@@ -5,23 +5,34 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { Button, Group, Menu } from '@mantine/core';
 import {
+  IconArrowDown,
+  IconArrowUp,
   IconBookUpload,
   IconCheck,
   IconLayoutBottombar,
   IconLayoutGrid,
   IconLayoutList,
+  IconLetterA,
   IconPhoto,
 } from '@tabler/icons';
 
 import ipcChannels from '../../constants/ipcChannels.json';
 import { bookListState, showingBookLibraryCtxMenuState } from '../../state/bookStates';
 import { handleBookAdded } from '../../services/bookActions';
-import { bookLibraryViewState } from '../../state/settingStates';
-import { LibraryView } from '../../models/types';
+import { bookLibrarySortState, bookLibraryViewState } from '../../state/settingStates';
+import { LibrarySort, LibraryView } from '../../models/types';
+
+const SORT_ICONS = {
+  [LibrarySort.TitleAsc]: <IconArrowUp size={14} />,
+  [LibrarySort.TitleDesc]: <IconArrowDown size={14} />,
+  [LibrarySort.UnreadAsc]: <IconArrowUp size={14} />,
+  [LibrarySort.UnreadDesc]: <IconArrowDown size={14} />,
+};
 
 const BooksControlBar = () => {
   const [bookList, setBookList] = useRecoilState(bookListState);
   const [libraryView, setLibraryView] = useRecoilState(bookLibraryViewState);
+  const [librarySort, setLibrarySort] = useRecoilState(bookLibrarySortState);
   const setShowingContextMenu = useSetRecoilState(showingBookLibraryCtxMenuState);
 
   const handleAddBook = () => {
@@ -100,6 +111,25 @@ const BooksControlBar = () => {
               // rightSection={libraryView === LibraryView.List ? <IconCheck size={14} /> : ''}
             >
               List
+            </Menu.Item>
+            <Menu.Divider />
+            <Menu.Label>Sort</Menu.Label>
+            <Menu.Item
+              icon={<IconLetterA size={14} />}
+              onClick={() =>
+                setLibrarySort(
+                  librarySort === LibrarySort.TitleAsc
+                    ? LibrarySort.TitleDesc
+                    : LibrarySort.TitleAsc
+                )
+              }
+              rightSection={
+                [LibrarySort.TitleAsc, LibrarySort.TitleDesc].includes(librarySort)
+                  ? SORT_ICONS[librarySort]
+                  : ''
+              }
+            >
+              Title
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>

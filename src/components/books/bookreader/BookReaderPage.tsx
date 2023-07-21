@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import routes from '../../../constants/routes.json';
-import books from '../../../services/books';
+import books, { BookLocations } from '../../../services/books';
 import { bookChapterListState, bookState } from '../../../state/bookStates';
 import { bookPageStyleState, bookThemeState } from '../../../state/settingStates';
 import BookReaderHeader from './BookReaderHeader';
@@ -21,9 +21,12 @@ const darkTheme = {
   },
   a: {
     color: '#0284c7',
+    'text-underline-offset': '4px',
   },
   'a:hover': {
-    color: '#082f49 !important',
+    'text-decoration': 'underline',
+    'background-color': 'rgba(26, 27, 30, 0.9) !important',
+    color: 'rgba(2, 132, 199, 0.9) !important',
   },
 };
 
@@ -34,6 +37,12 @@ const lightTheme = {
   },
   a: {
     color: '#1e83d2',
+    'text-underline-offset': '4px',
+  },
+  'a:hover': {
+    'text-decoration': 'underline',
+    'background-color': 'rgba(255,255,255, 0.9) !important',
+    color: 'rgba(2, 132, 199, 0.9) !important',
   },
 };
 
@@ -43,7 +52,6 @@ type ParamTypes = {
 
 // TODO: https://github.com/futurepress/epub.js/issues/759
 // https://github.com/johnfactotum/epubjs-tips
-
 const BookReaderPage = () => {
   const { book_id: bookId } = useParams<ParamTypes>();
   const navigate = useNavigate();
@@ -59,6 +67,7 @@ const BookReaderPage = () => {
   const pageStyle = useRecoilValue(bookPageStyleState);
 
   const exitPage = () => {
+    updateTitlebarText('Houdoku');
     navigate(`${routes.EBOOKS}`);
   };
 
@@ -83,13 +92,33 @@ const BookReaderPage = () => {
     return getNavItemByHref(loc, toc, book)?.label;
   };
 
-  const locationChanged = (value: string | number) => {
+  const locationChanged = async (value: string) => {
     if (bookInfo) {
       books.upsertBook({ ...bookInfo, currentCfi: value });
     }
 
     const labelFromLocation = getLabelFromLocation();
     setCurrentChapter(labelFromLocation);
+
+    const book = renditionRef.current?.book;
+    if (!book) {
+      return;
+    }
+
+    const progress = book.locations.percentageFromCfi(value);
+
+    const currentPage = book.locations.locationFromCfi(value) as unknown as number;
+
+    const totalPages = book.locations.length();
+
+    if (progress && bookInfo) {
+      console.log('SETTING BOOK INFO');
+      setBookInfo({ ...bookInfo, progress, currentPage, totalPages });
+    }
+
+    console.log('progress:', progress);
+    console.log('Current page: ', currentPage);
+    console.log('Total pages; ', totalPages);
   };
 
   const setChapter = (item: NavItem) => {
@@ -121,6 +150,24 @@ const BookReaderPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getOrSaveLocations = async () => {
+    const book = renditionRef.current?.book;
+    if (!book) return;
+
+    if (bookInfo) {
+      // gets or sets locations
+      const locations = books.getLocations(bookInfo.id);
+      if (locations.locations === '' || !locations) {
+        // Generates CFI for every X characters
+        await book.locations.generate(1000); // takes a couple of seconds
+        // saving an array of 1000 strings :/
+        books.saveLocations(bookInfo.id, { locations: book.locations.save() } as BookLocations);
+        return;
+      }
+      book.locations.load(locations.locations);
+    }
+  };
 
   useEffect(() => {
     renditionRef.current?.themes.select(bookTheme);
@@ -161,6 +208,9 @@ const BookReaderPage = () => {
               }}
               getRendition={(rendition) => {
                 renditionRef.current = rendition;
+
+                getOrSaveLocations();
+
                 renditionRef.current.themes.fontSize('140%');
                 renditionRef.current.themes.register('dark', {
                   ...darkTheme,

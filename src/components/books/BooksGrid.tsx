@@ -90,6 +90,23 @@ const BooksGrid: React.FC<Props> = (props: Props) => {
     }
   };
 
+  const renderBadge = (book: Book) => {
+    if (book.progress) {
+      return (
+        <Title
+          order={5}
+          className={styles.seriesUnreadBadge}
+          sx={(theme) => ({ backgroundColor: theme.colors.red[7] })}
+          px={4}
+          style={{ zIndex: 10 }}
+        >
+          {Math.trunc(book.progress * 100)}%
+        </Title>
+      );
+    }
+    return <></>;
+  };
+
   return (
     <>
       <SimpleGrid cols={libraryColumns} spacing="xs">
@@ -115,6 +132,7 @@ const BooksGrid: React.FC<Props> = (props: Props) => {
                       height="100%"
                       style={{ objectFit: 'cover' }}
                     />
+                    {renderBadge(book)}
                     {libraryView === LibraryView.GridCompact ? (
                       <>
                         <Title

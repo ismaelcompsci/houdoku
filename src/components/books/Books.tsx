@@ -6,6 +6,8 @@ import { activeBookListState } from '../../state/bookStates';
 import BooksControlBar from './BooksControlBar';
 import BooksGrid from './BooksGrid';
 import RemoveBookModal from './RemoveBookModal';
+import { bookLibrarySortState } from '../../state/settingStates';
+import { LibrarySort } from '../../models/types';
 
 type Props = unknown;
 
@@ -13,6 +15,7 @@ const Books: React.FC<Props> = () => {
   const [removeModalShowing, setRemoveModalShowing] = useState(false);
   const [removeModalBook, setRemoveModalBook] = useState<Book | null>(null);
   const bookList = useRecoilValue(activeBookListState);
+  const librarySort = useRecoilValue(bookLibrarySortState);
 
   const renderEmptyMessage = () => {
     return (
@@ -26,14 +29,21 @@ const Books: React.FC<Props> = () => {
     );
   };
 
-  const getFilteredList = () => {
+  const getFilteredList = (): Book[] => {
     const filteredList = bookList.filter((book: Book) => {
       if (!book) return false;
       return true;
     });
 
     //  sort by title desc
-    return filteredList.sort((a: Book, b: Book) => a.title.localeCompare(b.title));
+    switch (librarySort) {
+      case LibrarySort.TitleAsc:
+        return filteredList.sort((a: Book, b: Book) => a.title.localeCompare(b.title));
+      case LibrarySort.TitleDesc:
+        return filteredList.sort((a: Book, b: Book) => b.title.localeCompare(a.title));
+      default:
+        return filteredList;
+    }
   };
 
   return (

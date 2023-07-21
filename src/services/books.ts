@@ -3,6 +3,19 @@ import { v4 as uuidv4 } from 'uuid';
 import persistantStore from '../util/persistantStore';
 import storeKeys from '../constants/storeKeys.json';
 
+export type BookLocations = {
+  locations: string;
+};
+
+const getLocations = (bookId: string): BookLocations => {
+  const val = persistantStore.read(`${storeKeys.BOOKS.BOOK_LOCATIONS}${bookId}`);
+  return val === null ? '' : JSON.parse(val);
+};
+
+const saveLocations = (bookId: string, loactions: BookLocations) => {
+  persistantStore.write(`${storeKeys.BOOKS.BOOK_LOCATIONS}${bookId}`, JSON.stringify(loactions));
+};
+
 const fetchBookList = (): Book[] => {
   const val = persistantStore.read(`${storeKeys.BOOKS.SERIES_LIST}`);
   return val === null ? [] : JSON.parse(val);
@@ -38,4 +51,6 @@ export default {
   upsertBook,
   fetchBookList,
   fetchBook,
+  getLocations,
+  saveLocations,
 };

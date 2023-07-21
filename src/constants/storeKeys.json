@@ -14,6 +14,7 @@
     "INTEGRATION_PREFIX": "integration-"
   },
   "BOOKS": {
-    "SERIES_LIST": "book-series-list"
+    "SERIES_LIST": "book-series-list",
+    "BOOK_LOCATIONS":"loc-"
   }
 }
