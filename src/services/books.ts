@@ -16,6 +16,10 @@ const saveLocations = (bookId: string, loactions: BookLocations) => {
   persistantStore.write(`${storeKeys.BOOKS.BOOK_LOCATIONS}${bookId}`, JSON.stringify(loactions));
 };
 
+const deleteLocations = (bookId: string) => {
+  persistantStore.remove(`${storeKeys.BOOKS.BOOK_LOCATIONS}${bookId}`);
+};
+
 const fetchBookList = (): Book[] => {
   const val = persistantStore.read(`${storeKeys.BOOKS.SERIES_LIST}`);
   return val === null ? [] : JSON.parse(val);
@@ -53,4 +57,5 @@ export default {
   fetchBook,
   getLocations,
   saveLocations,
+  deleteLocations,
 };

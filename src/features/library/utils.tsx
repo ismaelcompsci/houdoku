@@ -53,8 +53,10 @@ export function removeBook(book: Book, setBookList: (bookList: Book[]) => void) 
   if (book.id === undefined) return;
 
   books.removeBook(book);
+  books.deleteLocations(book.id);
   deleteBook(book);
   setBookList(books.fetchBookList());
+  log.info(`Deleted  ${book.title}, ${book.title} locations, ${book.title} file`);
 }
 
 export function removeSeries(series: Series, setSeriesList: (seriesList: Series[]) => void) {

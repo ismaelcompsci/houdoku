@@ -67,7 +67,7 @@ const BookReaderPage = () => {
   const pageStyle = useRecoilValue(bookPageStyleState);
 
   const exitPage = () => {
-    updateTitlebarText('Houdoku');
+    updateTitlebarText();
     navigate(`${routes.EBOOKS}`);
   };
 
@@ -106,19 +106,12 @@ const BookReaderPage = () => {
     }
 
     const progress = book.locations.percentageFromCfi(value);
-
     const currentPage = book.locations.locationFromCfi(value) as unknown as number;
-
     const totalPages = book.locations.length();
 
     if (progress && bookInfo) {
-      console.log('SETTING BOOK INFO');
       setBookInfo({ ...bookInfo, progress, currentPage, totalPages });
     }
-
-    console.log('progress:', progress);
-    console.log('Current page: ', currentPage);
-    console.log('Total pages; ', totalPages);
   };
 
   const setChapter = (item: NavItem) => {
