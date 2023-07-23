@@ -146,6 +146,9 @@ export const activateEpubSupportState = atomFromSetting<boolean>(GeneralSetting.
 export const bookThemeState = atomFromSetting<string>(BookSetting.Theme);
 export const bookPageStyleState = atomFromSetting<BookPageStyle>(BookSetting.BookPageStyle);
 export const bookLibraryViewState = atomFromSetting<LibraryView>(GeneralSetting.BookLibraryView);
+export const bookFontScaleState = atomFromSetting<number>(BookSetting.FontScale);
+export const bookLineSpacingState = atomFromSetting<number>(BookSetting.LineSpacing);
+
 /* End book states */
 
 /* eslint-enable */

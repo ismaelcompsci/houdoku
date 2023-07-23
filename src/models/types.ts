@@ -124,6 +124,8 @@ export enum LibraryView {
 export enum BookSetting {
   Theme = 'Theme',
   BookPageStyle = 'BookPageStyle',
+  LineSpacing = 'LineSpacing',
+  FontScale = 'FontScale',
 }
 
 export enum ReaderSetting {
@@ -206,6 +208,7 @@ export const SettingTypes = {
   [GeneralSetting.LibraryView]: SettingType.STRING,
   [GeneralSetting.BookLibraryView]: SettingType.STRING,
   [GeneralSetting.LibrarySort]: SettingType.STRING,
+  [GeneralSetting.BookLibrarySort]: SettingType.STRING,
   [GeneralSetting.LibraryFilterStatus]: SettingType.STRING,
   [GeneralSetting.LibraryFilterProgress]: SettingType.STRING,
   [GeneralSetting.LibraryFilterCategory]: SettingType.STRING,
@@ -244,6 +247,8 @@ export const SettingTypes = {
   [BookSetting.Theme]: SettingType.STRING,
   [BookSetting.BookPageStyle]: SettingType.STRING,
   [GeneralSetting.EPUBSupport]: SettingType.BOOLEAN,
+  [BookSetting.LineSpacing]: SettingType.NUMBER,
+  [BookSetting.FontScale]: SettingType.NUMBER,
 
   [TrackerSetting.TrackerAutoUpdate]: SettingType.BOOLEAN,
 
@@ -298,6 +303,9 @@ export const DefaultSettings = {
   [GeneralSetting.EPUBSupport]: false,
   [BookSetting.Theme]: 'dark',
   [BookSetting.BookPageStyle]: BookPageStyle.LongStrip,
+  [BookSetting.LineSpacing]: 110,
+  [BookSetting.FontScale]: 100,
+
   [GeneralSetting.BookLibraryView]: LibraryView.GridCompact,
   [GeneralSetting.BookLibrarySort]: LibrarySort.TitleAsc,
 

@@ -7,42 +7,68 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import routes from '../../../constants/routes.json';
 import books, { BookLocations } from '../../../services/books';
 import { bookChapterListState, bookState } from '../../../state/bookStates';
-import { bookPageStyleState, bookThemeState } from '../../../state/settingStates';
+import {
+  bookFontScaleState,
+  bookLineSpacingState,
+  bookPageStyleState,
+  bookThemeState,
+} from '../../../state/settingStates';
 import BookReaderHeader from './BookReaderHeader';
 import styles from './bookReaderPage.css';
 import BookSettingsModal from './BookSettingsModal';
 import { flatten, getNavItemByHref } from '../../../util/bookUtils';
 import { updateTitlebarText } from '../../../util/titlebar';
 
-const darkTheme = {
+type Theme = {
   body: {
-    background: '#1A1B1E',
-    color: '#fff',
-  },
+    background: string;
+    color: string;
+  };
   a: {
-    color: '#0284c7',
-    'text-underline-offset': '4px',
-  },
+    color: string;
+    'text-underline-offset': string;
+  };
   'a:hover': {
-    'text-decoration': 'underline',
-    'background-color': 'rgba(26, 27, 30, 0.9) !important',
-    color: 'rgba(2, 132, 199, 0.9) !important',
-  },
+    'text-decoration': string;
+    'background-color': string;
+    color: string;
+  };
 };
 
-const lightTheme = {
-  body: {
-    background: '#fff',
-    color: '#09090b',
+type ThemeKeys = 'dark' | 'light';
+type Themes = { [key in ThemeKeys]: Theme };
+
+const themes: Themes = {
+  dark: {
+    body: {
+      background: '#1A1B1E',
+      color: '#fff',
+    },
+    a: {
+      color: '#0284c7',
+      'text-underline-offset': '4px',
+    },
+    'a:hover': {
+      'text-decoration': 'underline',
+      'background-color': 'rgba(26, 27, 30, 0.9) !important',
+      color: 'rgba(2, 132, 199, 0.9) !important',
+    },
   },
-  a: {
-    color: '#1e83d2',
-    'text-underline-offset': '4px',
-  },
-  'a:hover': {
-    'text-decoration': 'underline',
-    'background-color': 'rgba(255,255,255, 0.9) !important',
-    color: 'rgba(2, 132, 199, 0.9) !important',
+
+  light: {
+    body: {
+      background: '#fff',
+      color: '#09090b',
+    },
+    a: {
+      color: '#1e83d2',
+      'text-underline-offset': '4px',
+    },
+    'a:hover': {
+      'text-decoration': 'underline',
+      'background-color': 'rgba(255,255,255, 0.9) !important',
+      color: 'rgba(2, 132, 199, 0.9) !important',
+    },
   },
 };
 
@@ -65,6 +91,8 @@ const BookReaderPage = () => {
 
   const bookTheme = useRecoilValue(bookThemeState);
   const pageStyle = useRecoilValue(bookPageStyleState);
+  const fontScale = useRecoilValue(bookFontScaleState);
+  const lineSpacing = useRecoilValue(bookLineSpacingState);
 
   const exitPage = () => {
     updateTitlebarText();
@@ -162,15 +190,40 @@ const BookReaderPage = () => {
     }
   };
 
+  const themeRules = () => {
+    const isDark = bookTheme === 'dark';
+    const fontColor = isDark ? '#fff' : '#09090b';
+    const backgroundColor = isDark ? '#1A1B1E' : '#fff';
+
+    const finalLineValue = lineSpacing / 100;
+
+    const fontScaleValue = fontScale / 100;
+
+    return {
+      '*': {
+        color: `${fontColor}!important`,
+        'background-color': `${backgroundColor}!important`,
+        'line-height': `${finalLineValue * fontScaleValue}rem!important`,
+      },
+      a: {
+        color: `${fontColor}!important`,
+      },
+    };
+  };
+
   useEffect(() => {
     renditionRef.current?.themes.select(bookTheme);
     // solution: https://github.com/pgaskin/ePubViewer/blob/5b4d4990350d0548a7634b7a4d95aa0f39e262ab/script.js#L408-L461
     // https://github.com/pgaskin/ePubViewer/blob/5b4d4990350d0548a7634b7a4d95aa0f39e262ab/script.js#L122
 
+    renditionRef.current?.themes.default(themeRules());
+    renditionRef.current?.themes.fontSize(`${fontScale}%`);
+
     // find better way to update current theme
-    renditionRef.current?.clear();
-    renditionRef.current?.start(); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bookTheme]);
+    // renditionRef.current?.clear();
+    // renditionRef.current?.start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bookTheme, fontScale, lineSpacing]);
 
   return (
     <div className={styles.content} tabIndex={0}>
@@ -205,13 +258,15 @@ const BookReaderPage = () => {
                 getOrSaveLocations();
 
                 renditionRef.current.themes.fontSize('140%');
-                renditionRef.current.themes.register('dark', {
-                  ...darkTheme,
-                });
-                renditionRef.current.themes.register('light', {
-                  ...lightTheme,
-                });
-                renditionRef.current.themes.select(bookTheme);
+
+                renditionRef.current.themes.default(themeRules());
+                // renditionRef.current.themes.register('dark', {
+                //   ...themes[bookTheme],
+                // });
+                // renditionRef.current.themes.register('light', {
+                //   ...themes[bookTheme],
+                // });
+                // renditionRef.current.themes.select(bookTheme);
 
                 loadToc(renditionRef.current.book.navigation.toc);
               }}
