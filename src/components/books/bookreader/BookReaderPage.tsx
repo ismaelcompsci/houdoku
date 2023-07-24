@@ -84,9 +84,7 @@ const BookReaderPage = () => {
 
   const renditionRef = useRef<Rendition | null>(null);
 
-  const [currentChapter, setCurrentChapter] = useState<string | undefined>(
-    undefined
-  );
+  const [currentChapter, setCurrentChapter] = useState<string | undefined>(undefined);
   const [bookInfo, setBookInfo] = useRecoilState(bookState);
 
   const setToc = useSetRecoilState(bookChapterListState);
@@ -117,8 +115,7 @@ const BookReaderPage = () => {
     const toc = renditionRef.current?.book.navigation.toc;
     const book = renditionRef.current?.book;
     // @ts-expect-error wrong type set
-    const loc = (renditionRef.current?.currentLocation() as Location).start
-      .href;
+    const loc = (renditionRef.current?.currentLocation() as Location).start.href;
 
     return getNavItemByHref(loc, toc, book)?.label;
   };
@@ -137,9 +134,7 @@ const BookReaderPage = () => {
     }
 
     const progress = book.locations.percentageFromCfi(value);
-    const currentPage = book.locations.locationFromCfi(
-      value
-    ) as unknown as number;
+    const currentPage = book.locations.locationFromCfi(value) as unknown as number;
     const totalPages = book.locations.length();
 
     if (progress && bookInfo) {
@@ -162,10 +157,9 @@ const BookReaderPage = () => {
 
   useEffect(() => {
     if (currentChapter) {
-      updateTitlebarText(`${bookInfo?.title} - ${currentChapter}`);
-      return;
+      return updateTitlebarText(`${bookInfo?.title} - ${currentChapter}`);
     }
-    updateTitlebarText(`${bookInfo?.title}`);
+    return updateTitlebarText(`${bookInfo?.title}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChapter, bookInfo]);
 
@@ -204,7 +198,7 @@ const BookReaderPage = () => {
 
     const finalLineValue = lineSpacing / 100;
 
-    const fontScaleValue = fontScale / 100;
+    // const fontScaleValue = fontScale / 100;
 
     return {
       '*': {

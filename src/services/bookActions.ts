@@ -4,13 +4,13 @@ import Epub from 'epubjs';
 import { PackagingMetadataObject } from 'epubjs/types/packaging';
 import { fileTypeFromBuffer } from 'file-type';
 import fs from 'fs';
-import { Book } from 'houdoku-extension-lib';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 import ipcChannels from '../constants/ipcChannels.json';
 import { sanitizeFilename } from '../util/filesystem';
 import books from './books';
+import { Book } from '../models/types';
 
 export function blobToBuffer(blob: Blob): Promise<Buffer> {
   return new Promise((resolve, reject) => {
@@ -97,7 +97,6 @@ export async function handleBookAdded(bookPath: string): Promise<Book | undefine
       id: uuidv4(),
       title: meta.title,
       author: meta.creator,
-      publisher: meta.publisher,
       desciption: meta.description,
       identifer: meta.identifier,
       path: finalBookPath,

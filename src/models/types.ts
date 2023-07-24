@@ -313,3 +313,18 @@ export const DefaultSettings = {
 
   [IntegrationSetting.DiscordPresenceEnabled]: false,
 };
+
+export type Book = {
+  id: string;
+  title: string;
+  author: string;
+  desciption: string;
+  identifer: string;
+  path: string;
+  coverPath: string;
+  highlights: string[];
+  currentCfi: string;
+  progress?: number;
+  currentPage?: number;
+  totalPages?: number;
+};
