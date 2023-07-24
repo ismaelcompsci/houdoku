@@ -59,7 +59,7 @@ export async function saveBook(meta: PackagingMetadataObject, bookPath: string, 
   const filename = sanitizeFilename(
     `${meta.title}-${meta.creator}.${filetype[filetype.length - 1]}`
   );
-  const finalBookPath = `${bookDir}\\${filename}`;
+  const finalBookPath = `${bookDir}${path.sep}${filename}`;
   fs.copyFile(bookPath, finalBookPath, (err) => {
     if (err) throw err;
     log.info(`Copied ${bookPath} to ${finalBookPath}`);
