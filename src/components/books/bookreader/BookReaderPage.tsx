@@ -84,7 +84,9 @@ const BookReaderPage = () => {
 
   const renditionRef = useRef<Rendition | null>(null);
 
-  const [currentChapter, setCurrentChapter] = useState<string | undefined>(undefined);
+  const [currentChapter, setCurrentChapter] = useState<string | undefined>(
+    undefined
+  );
   const [bookInfo, setBookInfo] = useRecoilState(bookState);
 
   const setToc = useSetRecoilState(bookChapterListState);
@@ -115,7 +117,8 @@ const BookReaderPage = () => {
     const toc = renditionRef.current?.book.navigation.toc;
     const book = renditionRef.current?.book;
     // @ts-expect-error wrong type set
-    const loc = (renditionRef.current?.currentLocation() as Location).start.href;
+    const loc = (renditionRef.current?.currentLocation() as Location).start
+      .href;
 
     return getNavItemByHref(loc, toc, book)?.label;
   };
@@ -134,7 +137,9 @@ const BookReaderPage = () => {
     }
 
     const progress = book.locations.percentageFromCfi(value);
-    const currentPage = book.locations.locationFromCfi(value) as unknown as number;
+    const currentPage = book.locations.locationFromCfi(
+      value
+    ) as unknown as number;
     const totalPages = book.locations.length();
 
     if (progress && bookInfo) {
@@ -183,7 +188,9 @@ const BookReaderPage = () => {
         // Generates CFI for every X characters
         await book.locations.generate(1000); // takes a couple of seconds
         // saving an array of 1000 strings :/
-        books.saveLocations(bookInfo.id, { locations: book.locations.save() } as BookLocations);
+        books.saveLocations(bookInfo.id, {
+          locations: book.locations.save(),
+        } as BookLocations);
         return;
       }
       book.locations.load(locations.locations);
@@ -203,7 +210,7 @@ const BookReaderPage = () => {
       '*': {
         color: `${fontColor}!important`,
         'background-color': `${backgroundColor}!important`,
-        'line-height': `${finalLineValue * fontScaleValue}rem!important`,
+        'line-height': `${finalLineValue * 1.6}rem!important`,
       },
       a: {
         color: `${fontColor}!important`,
